@@ -36,6 +36,22 @@ const withinM = (d,m) => new Date(d)>=new Date(new Date().setMonth(new Date().ge
 const isYear = d => new Date(d).getFullYear()===new Date().getFullYear();
 const clamp = (v,a,b) => Math.min(Math.max(v,a),b);
 
+const isSameDay = (dateStr, targetDate) => {
+  if (!dateStr) return false;
+  const d1 = new Date(dateStr);
+  if (isNaN(d1)) return false;
+  return d1.getFullYear() === targetDate.getFullYear() &&
+         d1.getMonth() === targetDate.getMonth() &&
+         d1.getDate() === targetDate.getDate();
+};
+
+const toLocalDateStr = d => {
+  if (!d) return '';
+  const x = new Date(d);
+  if (isNaN(x)) return d;
+  return `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')}`;
+};
+
 // ============ TOAST ============
 function toast(msg, type='success') {
   const c = $('toast-container');
@@ -166,14 +182,24 @@ function render(page) {
 async function loadAll() {
   skeleton('page-beranda','summary');
   const [tRes, kRes] = await Promise.all([api('getTabungan'), api('getKeuangan')]);
-  if(tRes.success) {
-    S.tabungan = tRes.data||[];
+  if(tRes.success && Array.isArray(tRes.data)) {
+    S.tabungan = tRes.data;
     const txPs = S.tabungan.map(t=>api('getTransaksiTabungan',{tabungan_id:t.id}));
     const txRs = await Promise.all(txPs);
     S.txTabungan = [];
-    txRs.forEach((r,i)=>{ if(r.success&&r.data) r.data.forEach(tx=>{ tx.tabungan_id=S.tabungan[i].id; tx.tabungan_nama=S.tabungan[i].nama_tabungan; S.txTabungan.push(tx); }); });
+    txRs.forEach((r,i)=>{
+      if(r.success && Array.isArray(r.data)) {
+        r.data.forEach(tx=>{
+          if (S.tabungan[i]) {
+            tx.tabungan_id = S.tabungan[i].id;
+            tx.tabungan_nama = S.tabungan[i].nama_tabungan;
+          }
+          S.txTabungan.push(tx);
+        });
+      }
+    });
   }
-  if(kRes.success) S.keuangan = kRes.data||[];
+  if(kRes.success && Array.isArray(kRes.data)) S.keuangan = kRes.data;
   renderBeranda();
 }
 
@@ -251,7 +277,7 @@ function chartTab7() {
   const c=$('chart-tab7'); if(!c||typeof Chart==='undefined') return;
   if(S.charts.t7) S.charts.t7.destroy();
   const labels=[],data=[];
-  for(let i=6;i>=0;i--){ const d=new Date(); d.setDate(d.getDate()-i); const ds=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; labels.push(d.getDate()+' '+BULAN_S[d.getMonth()]); data.push(S.txTabungan.filter(tx=>tx.tanggal===ds&&tx.tipe==='setor').reduce((s,tx)=>s+Number(tx.jumlah),0)); }
+  for(let i=6;i>=0;i--){ const d=new Date(); d.setDate(d.getDate()-i); labels.push(d.getDate()+' '+BULAN_S[d.getMonth()]); data.push(S.txTabungan.filter(tx=>isSameDay(tx.tanggal, d) && tx.tipe==='setor').reduce((s,tx)=>s+Number(tx.jumlah),0)); }
   S.charts.t7 = new Chart(c,{type:'bar',data:{labels,datasets:[{data,backgroundColor:'rgba(36,123,208,0.2)',borderColor:'#247BD0',borderWidth:2,borderRadius:8,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{font:{family:'Plus Jakarta Sans',size:10},color:'#9CA3AF',callback:v=>v>=1e6?(v/1e6)+'jt':v>=1e3?(v/1e3)+'rb':v},grid:{color:'rgba(0,0,0,0.04)'}},x:{ticks:{font:{family:'Plus Jakarta Sans',size:10},color:'#9CA3AF'},grid:{display:false}}}}});
 }
 function chartDonut() {
@@ -388,7 +414,7 @@ function renderKeuangan() {
         <div class="bg-white rounded-2xl p-5 shadow-card"><h3 class="text-sm font-bold text-ink mb-3">Daftar Transaksi</h3>`;
         
   const sorted=[...filt].sort((a,b)=>new Date(b.tanggal)-new Date(a.tanggal));
-  const grouped={}; sorted.forEach(k=>{const key=k.tanggal;if(!grouped[key])grouped[key]=[];grouped[key].push(k);});
+  const grouped={}; sorted.forEach(k=>{const key=toLocalDateStr(k.tanggal);if(!grouped[key])grouped[key]=[];grouped[key].push(k);});
   if(!sorted.length) h+='<p class="text-sm text-ink-muted text-center py-6">Belum ada transaksi</p>';
   else Object.entries(grouped).forEach(([date,items])=>{
     h+=`<p class="text-xs font-semibold text-ink-muted mt-4 mb-2 first:mt-0">${fmtDateGroup(date)}</p>`;
