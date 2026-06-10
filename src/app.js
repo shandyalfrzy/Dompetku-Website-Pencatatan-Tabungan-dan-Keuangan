@@ -88,6 +88,10 @@ function updateHeader() {
   $('header-avatar').textContent = ini;
   $('header-greeting').textContent = `Halo, ${S.user}! 👋`;
   $('header-date').textContent = dateStr;
+  // Desktop header
+  const dg = $('desktop-greeting'), dd = $('desktop-date');
+  if (dg) dg.textContent = `Halo, ${S.user}! 👋`;
+  if (dd) dd.textContent = dateStr;
   // Desktop sidebar
   $('sidebar-avatar').textContent = ini;
   $('sidebar-username').textContent = S.user;
@@ -190,21 +194,24 @@ function renderBeranda() {
         <p class="text-2xl font-extrabold">${fmtRp(totalTab)}</p>
         <p class="text-xs opacity-70 mt-1">${S.tabungan.length} tabungan aktif</p>
       </div>
-      <div class="bg-white rounded-2xl p-4 shadow-card">
+      <div class="bg-white rounded-2xl p-4 shadow-card col-span-2 md:col-span-4 lg:col-span-2">
+        <div class="flex items-center justify-between h-full">
+          <div>
+            <p class="text-xs text-ink-muted mb-1">Saldo Bulan Ini</p>
+            <p class="text-xl font-extrabold ${saldo>=0?'text-success':'text-danger'}">${saldo>=0?'+':'-'} ${fmtRp(Math.abs(saldo))}</p>
+          </div>
+          <div class="text-xs text-ink-muted self-start">${BULAN[now.getMonth()]} ${now.getFullYear()}</div>
+        </div>
+      </div>
+      <div class="bg-white rounded-2xl p-4 shadow-card col-span-1 md:col-span-2 lg:col-span-2">
         <div class="w-8 h-8 rounded-lg bg-success/10 flex items-center justify-center mb-2"><svg class="w-4 h-4 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"/></svg></div>
         <p class="text-xs text-ink-muted mb-0.5">Pemasukan</p>
         <p class="text-sm font-bold text-success">${fmtRp(tIn)}</p>
       </div>
-      <div class="bg-white rounded-2xl p-4 shadow-card">
+      <div class="bg-white rounded-2xl p-4 shadow-card col-span-1 md:col-span-2 lg:col-span-2">
         <div class="w-8 h-8 rounded-lg bg-danger/10 flex items-center justify-center mb-2"><svg class="w-4 h-4 text-danger" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6"/></svg></div>
         <p class="text-xs text-ink-muted mb-0.5">Pengeluaran</p>
         <p class="text-sm font-bold text-danger">${fmtRp(tOut)}</p>
-      </div>
-      <div class="bg-white rounded-2xl p-4 shadow-card col-span-2 md:col-span-4 lg:col-span-2">
-        <div class="flex items-center justify-between">
-          <div><p class="text-xs text-ink-muted mb-0.5">Saldo Bulan Ini</p><p class="text-lg font-bold ${saldo>=0?'text-success':'text-danger'}">${saldo>=0?'+':'-'} ${fmtRp(Math.abs(saldo))}</p></div>
-          <div class="text-xs text-ink-muted">${BULAN[now.getMonth()]} ${now.getFullYear()}</div>
-        </div>
       </div>
     </div>
     <div class="md:grid md:grid-cols-2 md:gap-4">
@@ -297,19 +304,36 @@ function renderDetail() {
   const t=S.selTab; if(!t){nav('tabungan');return;}
   const el=$('page-tabungan-detail'), tot=tabTotal(t.id), tgt=Number(t.target), pct=tgt>0?clamp(Math.round(tot/tgt*100),0,100):0, rem=Math.max(tgt-tot,0), col=t.warna||'#247BD0';
   const txs=S.txTabungan.filter(tx=>tx.tabungan_id===t.id).sort((a,b)=>new Date(b.tanggal)-new Date(a.tanggal));
-  let h=`<button onclick="nav('tabungan')" class="flex items-center gap-2 text-ink-muted text-sm font-semibold mb-4 active:scale-95 transition-transform cursor-pointer"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>Kembali</button>
-    <div class="rounded-2xl p-5 mb-4 shadow-card" style="background:linear-gradient(135deg,${col},${col}DD)">
-      <div class="flex items-center justify-between mb-4"><div><p class="text-white/70 text-xs font-medium mb-1">Tabungan</p><h3 class="text-white text-lg font-bold">${t.nama_tabungan}</h3></div>
-      <div class="flex gap-2"><button onclick="openEditTab()" class="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center text-white active:scale-90 transition-transform cursor-pointer"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
-      <button onclick="reqDelTab('${t.id}')" class="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center text-white active:scale-90 transition-transform cursor-pointer"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></div>
-      <div class="text-center mb-4"><p class="text-white text-3xl font-extrabold">${fmtRp(tot)}</p><p class="text-white/60 text-xs mt-1">dari target ${fmtRp(tgt)}</p></div>
-      <div class="w-full h-3 bg-white/20 rounded-full overflow-hidden mb-2"><div class="h-full bg-white rounded-full transition-all duration-700" style="width:${pct}%"></div></div>
-      <div class="flex justify-between text-xs text-white/70"><span>${pct}% tercapai</span><span>Sisa: ${fmtRp(rem)}</span></div></div>
-    <div class="grid grid-cols-2 gap-3 mb-5">
-      <button onclick="openSetorTarik('setor')" class="py-3.5 rounded-xl bg-success/10 text-success font-bold text-sm flex items-center justify-center gap-2 active:scale-[0.98] transition-all cursor-pointer"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>Setor</button>
-      <button onclick="openSetorTarik('tarik')" class="py-3.5 rounded-xl bg-danger/10 text-danger font-bold text-sm flex items-center justify-center gap-2 active:scale-[0.98] transition-all cursor-pointer"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/></svg>Tarik</button>
-    </div>
-    <div class="bg-white rounded-2xl p-5 shadow-card"><h3 class="text-sm font-bold text-ink mb-3">Riwayat Transaksi</h3>`;
+  
+  let h=`<button onclick="nav('tabungan')" class="flex items-center gap-2 text-ink-muted text-sm font-semibold mb-4 active:scale-95 transition-transform cursor-pointer"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>Kembali</button>`;
+  
+  h += `<div class="grid grid-cols-1 lg:grid-cols-12 lg:gap-6">`;
+  
+  // Left Column
+  h += `
+    <div class="lg:col-span-5">
+      <div class="rounded-2xl p-5 mb-4 shadow-card" style="background:linear-gradient(135deg,${col},${col}DD)">
+        <div class="flex items-center justify-between mb-4">
+          <div><p class="text-white/70 text-xs font-medium mb-1">Tabungan</p><h3 class="text-white text-lg font-bold">${t.nama_tabungan}</h3></div>
+          <div class="flex gap-2">
+            <button onclick="openEditTab()" class="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center text-white active:scale-90 transition-transform cursor-pointer"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
+            <button onclick="reqDelTab('${t.id}')" class="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center text-white active:scale-90 transition-transform cursor-pointer"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
+          </div>
+        </div>
+        <div class="text-center mb-4"><p class="text-white text-3xl font-extrabold">${fmtRp(tot)}</p><p class="text-white/60 text-xs mt-1">dari target ${fmtRp(tgt)}</p></div>
+        <div class="w-full h-3 bg-white/20 rounded-full overflow-hidden mb-2"><div class="h-full bg-white rounded-full transition-all duration-700" style="width:${pct}%"></div></div>
+        <div class="flex justify-between text-xs text-white/70"><span>${pct}% tercapai</span><span>Sisa: ${fmtRp(rem)}</span></div>
+      </div>
+      <div class="grid grid-cols-2 gap-3 mb-5">
+        <button onclick="openSetorTarik('setor')" class="py-3.5 rounded-xl bg-success/10 text-success font-bold text-sm flex items-center justify-center gap-2 active:scale-[0.98] transition-all cursor-pointer"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>Setor</button>
+        <button onclick="openSetorTarik('tarik')" class="py-3.5 rounded-xl bg-danger/10 text-danger font-bold text-sm flex items-center justify-center gap-2 active:scale-[0.98] transition-all cursor-pointer"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/></svg>Tarik</button>
+      </div>
+    </div>`;
+  
+  // Right Column
+  h += `
+    <div class="lg:col-span-7">
+      <div class="bg-white rounded-2xl p-5 shadow-card"><h3 class="text-sm font-bold text-ink mb-3">Riwayat Transaksi</h3>`;
   if(!txs.length) h+='<p class="text-sm text-ink-muted text-center py-6">Belum ada transaksi</p>';
   else txs.forEach(tx=>{
     const isS=tx.tipe==='setor';
@@ -320,7 +344,7 @@ function renderDetail() {
       <div class="flex gap-1 shrink-0"><button onclick="openEditTx('${tx.id}')" class="w-8 h-8 rounded-lg bg-surface-muted flex items-center justify-center text-ink-muted active:scale-90 cursor-pointer"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
       <button onclick="reqDelTx('${tx.id}')" class="w-8 h-8 rounded-lg bg-surface-muted flex items-center justify-center text-ink-muted active:scale-90 cursor-pointer"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></div>`;
   });
-  h+='</div>';
+  h+='</div></div></div>';
   el.innerHTML=h;
 }
 
@@ -336,16 +360,33 @@ function renderKeuangan() {
   const tOut=filt.filter(k=>k.tipe==='pengeluaran').reduce((s,k)=>s+Number(k.jumlah),0);
   const saldo=tIn-tOut;
   const fLabels={semua:'Semua',bulan_ini:'Bulan Ini','3_bulan':'3 Bulan',tahun_ini:'Tahun Ini'};
+  
   let h=`<h2 class="text-lg font-bold text-ink mb-4">Keuangan</h2>
-    <div class="flex gap-2 mb-4 overflow-x-auto pb-1 scroll-snap-x">${Object.entries(fLabels).map(([k,v])=>`<button onclick="setKF('${k}')" class="filter-chip px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap bg-surface-dim text-ink-muted cursor-pointer ${S.kFilter===k?'active':''}">${v}</button>`).join('')}</div>
-    <div class="grid grid-cols-3 gap-2 mb-4">
-      <div class="bg-white rounded-2xl p-3 shadow-card text-center"><p class="text-[10px] text-ink-muted mb-1">Pemasukan</p><p class="text-xs font-bold text-success">${fmtRp(tIn)}</p></div>
-      <div class="bg-white rounded-2xl p-3 shadow-card text-center"><p class="text-[10px] text-ink-muted mb-1">Pengeluaran</p><p class="text-xs font-bold text-danger">${fmtRp(tOut)}</p></div>
-      <div class="bg-white rounded-2xl p-3 shadow-card text-center"><p class="text-[10px] text-ink-muted mb-1">Saldo</p><p class="text-xs font-bold ${saldo>=0?'text-success':'text-danger'}">${fmtRp(Math.abs(saldo))}</p></div>
-    </div>
-    <div class="mb-4"><button onclick="toggleKCharts()" class="flex items-center gap-2 text-sm font-semibold text-primary mb-3 cursor-pointer"><svg id="k-chev" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>Grafik Keuangan</button>
-    <div id="k-charts" class="hidden"><div class="md:grid md:grid-cols-2 md:gap-4"><div class="bg-white rounded-2xl p-5 shadow-card mb-3"><h4 class="text-xs font-bold text-ink mb-3">Pemasukan vs Pengeluaran (6 Bulan)</h4><div style="height:180px"><canvas id="chart-kbar"></canvas></div></div><div class="bg-white rounded-2xl p-5 shadow-card mb-3"><h4 class="text-xs font-bold text-ink mb-3">Komposisi Pengeluaran</h4><div style="height:200px"><canvas id="chart-kdonut"></canvas></div></div></div></div></div>
-    <div class="bg-white rounded-2xl p-5 shadow-card"><h3 class="text-sm font-bold text-ink mb-3">Daftar Transaksi</h3>`;
+    <div class="grid grid-cols-1 lg:grid-cols-12 lg:gap-6">
+      
+      <!-- Left Column: Summary and Charts -->
+      <div class="lg:col-span-5 flex flex-col gap-4">
+        <div class="flex gap-2 overflow-x-auto pb-1 scroll-snap-x">${Object.entries(fLabels).map(([k,v])=>`<button onclick="setKF('${k}')" class="filter-chip px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap bg-surface-dim text-ink-muted cursor-pointer ${S.kFilter===k?'active':''}">${v}</button>`).join('')}</div>
+        <div class="grid grid-cols-3 gap-2">
+          <div class="bg-white rounded-2xl p-3 shadow-card text-center"><p class="text-[10px] text-ink-muted mb-1">Pemasukan</p><p class="text-xs font-bold text-success">${fmtRp(tIn)}</p></div>
+          <div class="bg-white rounded-2xl p-3 shadow-card text-center"><p class="text-[10px] text-ink-muted mb-1">Pengeluaran</p><p class="text-xs font-bold text-danger">${fmtRp(tOut)}</p></div>
+          <div class="bg-white rounded-2xl p-3 shadow-card text-center"><p class="text-[10px] text-ink-muted mb-1">Saldo</p><p class="text-xs font-bold ${saldo>=0?'text-success':'text-danger'}">${fmtRp(Math.abs(saldo))}</p></div>
+        </div>
+        <div class="lg:hidden mb-1">
+          <button onclick="toggleKCharts()" class="flex items-center gap-2 text-sm font-semibold text-primary cursor-pointer"><svg id="k-chev" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>Grafik Keuangan</button>
+        </div>
+        <div id="k-charts" class="hidden lg:block mb-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4">
+            <div class="bg-white rounded-2xl p-5 shadow-card"><h4 class="text-xs font-bold text-ink mb-3">Pemasukan vs Pengeluaran (6 Bulan)</h4><div style="height:180px"><canvas id="chart-kbar"></canvas></div></div>
+            <div class="bg-white rounded-2xl p-5 shadow-card"><h4 class="text-xs font-bold text-ink mb-3">Komposisi Pengeluaran</h4><div style="height:200px"><canvas id="chart-kdonut"></canvas></div></div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Right Column: Daftar Transaksi -->
+      <div class="lg:col-span-7">
+        <div class="bg-white rounded-2xl p-5 shadow-card"><h3 class="text-sm font-bold text-ink mb-3">Daftar Transaksi</h3>`;
+        
   const sorted=[...filt].sort((a,b)=>new Date(b.tanggal)-new Date(a.tanggal));
   const grouped={}; sorted.forEach(k=>{const key=k.tanggal;if(!grouped[key])grouped[key]=[];grouped[key].push(k);});
   if(!sorted.length) h+='<p class="text-sm text-ink-muted text-center py-6">Belum ada transaksi</p>';
@@ -361,8 +402,12 @@ function renderKeuangan() {
         <button onclick="reqDelK('${k.id}')" class="w-7 h-7 rounded-lg bg-surface-muted flex items-center justify-center text-ink-muted active:scale-90 cursor-pointer"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></div>`;
     });
   });
-  h+='</div>';
+  h+='</div></div></div>';
   el.innerHTML=h;
+  
+  if (window.innerWidth >= 1024) {
+    setTimeout(() => { chartKBar(); chartKDonut(); }, 100);
+  }
 }
 function setKF(f){S.kFilter=f;renderKeuangan();}
 function toggleKCharts(){const c=$('k-charts'),ch=$('k-chev');const h=c.classList.contains('hidden');c.classList.toggle('hidden');ch.style.transform=h?'rotate(180deg)':'';if(h)setTimeout(()=>{chartKBar();chartKDonut();},100);}
@@ -384,9 +429,11 @@ function renderRiwayat() {
   S.rItems=all;
   const filters={semua:'Semua',tabungan:'Tabungan',keuangan:'Keuangan'};
   let h=`<h2 class="text-lg font-bold text-ink mb-4">Riwayat</h2>
-    <div class="relative mb-3"><svg class="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-ink-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-    <input id="r-search" type="text" placeholder="Cari catatan atau kategori..." value="${S.rSearch}" class="w-full pl-11 pr-4 py-3 rounded-xl border-2 border-surface-dim bg-white text-sm text-ink placeholder:text-ink-light focus:border-primary focus:outline-none transition-colors"></div>
-    <div class="flex gap-2 mb-4">${Object.entries(filters).map(([k,v])=>`<button onclick="setRF('${k}')" class="filter-chip px-4 py-2 rounded-full text-xs font-semibold bg-surface-dim text-ink-muted cursor-pointer ${S.rFilter===k?'active':''}">${v}</button>`).join('')}</div>
+    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 mb-4">
+      <div class="relative flex-1 max-w-md"><svg class="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-ink-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      <input id="r-search" type="text" placeholder="Cari catatan atau kategori..." value="${S.rSearch}" class="w-full pl-11 pr-4 py-3 rounded-xl border-2 border-surface-dim bg-white text-sm text-ink placeholder:text-ink-light focus:border-primary focus:outline-none transition-colors"></div>
+      <div class="flex gap-2 shrink-0">${Object.entries(filters).map(([k,v])=>`<button onclick="setRF('${k}')" class="filter-chip px-4 py-2 rounded-full text-xs font-semibold bg-surface-dim text-ink-muted cursor-pointer ${S.rFilter===k?'active':''}">${v}</button>`).join('')}</div>
+    </div>
     <div id="r-list" class="bg-white rounded-2xl shadow-card overflow-hidden">`;
   const page=all.slice(0,20);
   if(!page.length) h+='<p class="text-sm text-ink-muted text-center py-8">Tidak ada riwayat</p>';
@@ -604,6 +651,7 @@ document.addEventListener('DOMContentLoaded', () => {
   $('fab-btn').addEventListener('click', handleFab);
   // Settings
   $('header-settings-btn').addEventListener('click', openSettings);
+  $('desktop-settings-btn')?.addEventListener('click', openSettings);
   $('sidebar-settings-btn')?.addEventListener('click', openSettings);
   $('sidebar-logout-btn')?.addEventListener('click', doLogout);
 

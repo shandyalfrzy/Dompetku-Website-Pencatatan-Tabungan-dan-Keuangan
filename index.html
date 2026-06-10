@@ -39,7 +39,7 @@
           </button>
         </div>
       </div>
-    </div> test
+    </div>
 
     <!-- LOGIN SCREEN -->
     <div id="screen-login" class="hidden min-h-screen items-center justify-center px-6 py-10">
@@ -80,7 +80,7 @@
 
     <!-- MAIN APP -->
     <div id="screen-main" class="hidden">
-      <div class="lg:desktop-sidebar-layout">
+      <div class="desktop-sidebar-layout">
 
         <!-- Desktop Sidebar (hidden on mobile) -->
         <aside class="desktop-sidebar">
@@ -129,6 +129,17 @@
 
         <!-- Main Content -->
         <div class="desktop-main pb-24 lg:pb-6">
+          <!-- Desktop Header (hidden on mobile) -->
+          <header class="hidden lg:flex items-center justify-between mb-8 pb-4 border-b border-surface-dim">
+            <div>
+              <h1 id="desktop-greeting" class="text-2xl font-extrabold text-ink"></h1>
+              <p id="desktop-date" class="text-sm text-ink-muted mt-1"></p>
+            </div>
+            <button id="desktop-settings-btn" class="w-10 h-10 rounded-xl bg-white border border-surface-dim flex items-center justify-center text-ink-muted hover:bg-surface-muted transition-colors cursor-pointer shadow-sm">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </header>
+
           <!-- Mobile Header -->
           <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-surface-dim px-5 py-3.5 lg:hidden">
             <div class="flex items-center justify-between">

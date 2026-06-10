@@ -220,49 +220,57 @@ input[type="number"]::-webkit-inner-spin-button {
   scroll-snap-align: start;
 }
 
-/* ============ DESKTOP LAYOUT ============ */
-@media (min-width: 768px) {
-  .desktop-grid-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-  }
-  .desktop-grid-3 {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 1rem;
-  }
-}
 @media (min-width: 1024px) {
   .desktop-sidebar-layout {
     display: grid;
     grid-template-columns: 280px 1fr;
-    max-width: 1200px;
+    max-width: 1280px;
     margin: 0 auto;
     min-height: 100vh;
   }
   .desktop-sidebar {
     display: flex;
     flex-direction: column;
-    background: white;
-    border-right: 1px solid var(--color-surface-dim);
-    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-right: 1px solid rgba(36, 123, 208, 0.08);
+    padding: 2rem 1.5rem;
     position: sticky;
     top: 0;
     height: 100vh;
     overflow-y: auto;
+    box-shadow: 4px 0 24px rgba(36, 123, 208, 0.02);
   }
   .desktop-main {
-    max-width: 720px;
+    max-width: 920px;
     width: 100%;
     margin: 0 auto;
-    padding: 1.5rem;
+    padding: 2rem 1.5rem;
   }
   .mobile-bottom-nav {
     display: none !important;
   }
   .desktop-nav-show {
     display: flex !important;
+  }
+
+  /* Sidebar active & hover improvements */
+  .sidebar-nav-btn {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .sidebar-nav-btn:hover {
+    transform: translateX(4px);
+    color: var(--color-primary) !important;
+    background-color: var(--color-surface-muted);
+  }
+  /* Target the active classes applied by app.js: bg-primary/10 or text-primary */
+  .sidebar-nav-btn[class*="bg-primary/10"],
+  .sidebar-nav-btn[class*="text-primary"] {
+    background-color: var(--color-primary-50) !important;
+    color: var(--color-primary) !important;
+    font-weight: 700 !important;
+    box-shadow: inset 4px 0 0 0 var(--color-primary);
   }
 }
 
