@@ -9,7 +9,40 @@ const USERS = [
 ];
 const KAT_IN = ['Gaji','Freelance','Bisnis','Investasi','Hadiah','Lainnya'];
 const KAT_OUT = ['Makanan','Transportasi','Belanja','Tagihan','Kesehatan','Hiburan','Pendidikan','Lainnya'];
-const KAT_ICON = {Gaji:'💼',Freelance:'💻',Bisnis:'🏢',Investasi:'📈',Hadiah:'🎁',Makanan:'🍔',Transportasi:'🚗',Belanja:'🛒',Tagihan:'📄',Kesehatan:'🏥',Hiburan:'🎮',Pendidikan:'📚',Lainnya:'📦'};
+
+const SVG_ICONS = {
+  Gaji: `<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>`,
+  Freelance: `<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>`,
+  Bisnis: `<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5"/></svg>`,
+  Investasi: `<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>`,
+  Hadiah: `<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V6a2 2 0 10-2 2h2zm0 0H4v13a2 2 0 002 2h12a2 2 0 002-2V8h-8z"/></svg>`,
+  Makanan: `<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2c1.657 0 3 1.254 3 2.8v4.4c0 1.215-.81 2.24-1.92 2.62v7.18c0 .552-.448 1-1.08 1h-.001c-.63 0-1.079-.448-1.079-1v-7.18c-1.11-.38-1.92-1.405-1.92-2.62V4.8C9 3.254 10.343 2 12 2zM19 8h-1V3a1 1 0 00-1-1h-1a1 1 0 00-1 1v5h-1M5 8h1V3a1 1 0 011-1h1a1 1 0 011 1v5h1"/></svg>`,
+  Transportasi: `<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 18h14M5 18a2 2 0 100-4h14a2 2 0 100 4M5 14l1-8h12l1 8M9 9h.01M15 9h.01"/></svg>`,
+  Belanja: `<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>`,
+  Tagihan: `<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>`,
+  Kesehatan: `<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>`,
+  Hiburan: `<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/></svg>`,
+  Pendidikan: `<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.168.477 4 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4 1.253"/></svg>`,
+  Lainnya: `<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>`,
+  Tabungan: `<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1z"/><path stroke-linecap="round" stroke-linejoin="round" d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg>`,
+  Tarik: `<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4"/></svg>`
+};
+
+const KAT_ICON = {
+  Gaji: SVG_ICONS.Gaji,
+  Freelance: SVG_ICONS.Freelance,
+  Bisnis: SVG_ICONS.Bisnis,
+  Investasi: SVG_ICONS.Investasi,
+  Hadiah: SVG_ICONS.Hadiah,
+  Makanan: SVG_ICONS.Makanan,
+  Transportasi: SVG_ICONS.Transportasi,
+  Belanja: SVG_ICONS.Belanja,
+  Tagihan: SVG_ICONS.Tagihan,
+  Kesehatan: SVG_ICONS.Kesehatan,
+  Hiburan: SVG_ICONS.Hiburan,
+  Pendidikan: SVG_ICONS.Pendidikan,
+  Lainnya: SVG_ICONS.Lainnya
+};
 const BULAN = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
 const BULAN_S = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
 const HARI = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
@@ -102,11 +135,11 @@ function updateHeader() {
   const dateStr = `${HARI[now.getDay()]}, ${now.getDate()} ${BULAN[now.getMonth()]} ${now.getFullYear()}`;
   // Mobile header
   $('header-avatar').textContent = ini;
-  $('header-greeting').textContent = `Halo, ${S.user}! 👋`;
+  $('header-greeting').textContent = `Halo, ${S.user}!`;
   $('header-date').textContent = dateStr;
   // Desktop header
   const dg = $('desktop-greeting'), dd = $('desktop-date');
-  if (dg) dg.textContent = `Halo, ${S.user}! 👋`;
+  if (dg) dg.textContent = `Halo, ${S.user}!`;
   if (dd) dd.textContent = dateStr;
   // Desktop sidebar
   $('sidebar-avatar').textContent = ini;
@@ -259,14 +292,14 @@ function renderBeranda() {
 
 function recentList() {
   const items = [];
-  S.txTabungan.forEach(tx=>items.push({tipe:tx.tipe,jml:Number(tx.jumlah),note:tx.catatan||tx.tabungan_nama||'-',label:tx.tabungan_nama||'Tabungan',tgl:tx.tanggal,icon:tx.tipe==='setor'?'🐷':'💸'}));
-  S.keuangan.forEach(k=>items.push({tipe:k.tipe,jml:Number(k.jumlah),note:k.catatan||'-',label:k.kategori,tgl:k.tanggal,icon:KAT_ICON[k.kategori]||'📦'}));
+  S.txTabungan.forEach(tx=>items.push({tipe:tx.tipe,jml:Number(tx.jumlah),note:tx.catatan||tx.tabungan_nama||'-',label:tx.tabungan_nama||'Tabungan',tgl:tx.tanggal,icon:tx.tipe==='setor'?SVG_ICONS.Tabungan:SVG_ICONS.Tarik}));
+  S.keuangan.forEach(k=>items.push({tipe:k.tipe,jml:Number(k.jumlah),note:k.catatan||'-',label:k.kategori,tgl:k.tanggal,icon:KAT_ICON[k.kategori]||SVG_ICONS.Lainnya}));
   items.sort((a,b)=>new Date(b.tgl)-new Date(a.tgl));
   const top5 = items.slice(0,5);
   if(!top5.length) return '<p class="text-sm text-ink-muted text-center py-6">Belum ada aktivitas</p>';
   return top5.map((it,i)=>`
     <div class="flex items-center gap-3 py-2.5 ${i<top5.length-1?'border-b border-surface-dim':''}">
-      <div class="w-10 h-10 rounded-xl bg-surface-muted flex items-center justify-center text-lg shrink-0">${it.icon}</div>
+      <div class="w-10 h-10 rounded-xl bg-surface-muted flex items-center justify-center shrink-0">${it.icon}</div>
       <div class="flex-1 min-w-0"><p class="text-sm font-semibold text-ink truncate">${it.label}</p><p class="text-xs text-ink-muted truncate">${it.note}</p></div>
       <div class="text-right shrink-0"><p class="text-sm font-bold ${it.tipe==='pemasukan'||it.tipe==='setor'?'text-success':'text-danger'}">${it.tipe==='pemasukan'||it.tipe==='setor'?'+':'-'} ${fmtRp(it.jml)}</p><p class="text-[10px] text-ink-light">${fmtDate(it.tgl)}</p></div>
     </div>`).join('');
@@ -311,12 +344,12 @@ function tabTotal(id) { return S.txTabungan.filter(tx=>tx.tabungan_id===id).redu
 
 function renderTabungan() {
   const el=$('page-tabungan');
-  if(!S.tabungan.length){ el.innerHTML=`<div class="text-center py-16"><div class="w-20 h-20 rounded-3xl bg-primary/10 mx-auto mb-4 flex items-center justify-center"><span class="text-4xl">🐷</span></div><h3 class="text-lg font-bold text-ink mb-1">Belum Ada Tabungan</h3><p class="text-sm text-ink-muted mb-6">Mulai menabung untuk tujuanmu!</p><button onclick="openAddTab()" class="px-6 py-3 rounded-xl bg-gradient-to-r from-primary to-primary-light text-white font-semibold text-sm shadow-fab active:scale-[0.98] transition-all cursor-pointer">+ Tambah Tabungan</button></div>`; return; }
+  if(!S.tabungan.length){ el.innerHTML=`<div class="text-center py-16"><div class="w-20 h-20 rounded-3xl bg-primary/10 mx-auto mb-4 flex items-center justify-center text-primary"><svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1z"/><path stroke-linecap="round" stroke-linejoin="round" d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg></div><h3 class="text-lg font-bold text-ink mb-1">Belum Ada Tabungan</h3><p class="text-sm text-ink-muted mb-6">Mulai menabung untuk tujuanmu!</p><button onclick="openAddTab()" class="px-6 py-3 rounded-xl bg-gradient-to-r from-primary to-primary-light text-white font-semibold text-sm shadow-fab active:scale-[0.98] transition-all cursor-pointer">+ Tambah Tabungan</button></div>`; return; }
   let h = '<h2 class="text-lg font-bold text-ink mb-4">Tabunganku</h2><div class="md:grid md:grid-cols-2 md:gap-4">';
   S.tabungan.forEach(t => {
     const tot=tabTotal(t.id), tgt=Number(t.target), pct=tgt>0?clamp(Math.round(tot/tgt*100),0,100):0, col=t.warna||'#247BD0';
     h+=`<div onclick="openDetail('${t.id}')" class="bg-white rounded-2xl p-5 shadow-card mb-3 cursor-pointer active:scale-[0.98] transition-transform">
-      <div class="flex items-center justify-between mb-3"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0" style="background:${col}20">🐷</div><div><p class="text-sm font-bold text-ink">${t.nama_tabungan}</p><p class="text-xs text-ink-muted">Target: ${fmtRp(tgt)}</p></div></div><span class="text-xs font-bold px-2.5 py-1 rounded-full shrink-0" style="background:${col}20;color:${col}">${pct}%</span></div>
+      <div class="flex items-center justify-between mb-3"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background:${col}20;color:${col}">${SVG_ICONS.Tabungan}</div><div><p class="text-sm font-bold text-ink">${t.nama_tabungan}</p><p class="text-xs text-ink-muted">Target: ${fmtRp(tgt)}</p></div></div><span class="text-xs font-bold px-2.5 py-1 rounded-full shrink-0" style="background:${col}20;color:${col}">${pct}%</span></div>
       <div class="w-full h-2.5 bg-surface-dim rounded-full overflow-hidden"><div class="progress-fill h-full rounded-full" style="width:${pct}%;--bar-from:${col};--bar-to:${col}CC"></div></div>
       <div class="flex items-center justify-between mt-2"><span class="text-xs text-ink-muted">Terkumpul</span><span class="text-sm font-bold" style="color:${col}">${fmtRp(tot)}</span></div></div>`;
   });
@@ -419,9 +452,9 @@ function renderKeuangan() {
   else Object.entries(grouped).forEach(([date,items])=>{
     h+=`<p class="text-xs font-semibold text-ink-muted mt-4 mb-2 first:mt-0">${fmtDateGroup(date)}</p>`;
     items.forEach(k=>{
-      const isIn=k.tipe==='pemasukan', icon=KAT_ICON[k.kategori]||'📦';
+      const isIn=k.tipe==='pemasukan', icon=KAT_ICON[k.kategori]||SVG_ICONS.Lainnya;
       h+=`<div class="flex items-center gap-3 py-2.5 border-b border-surface-dim last:border-b-0">
-        <div class="w-10 h-10 rounded-xl ${isIn?'bg-success/10':'bg-danger/10'} flex items-center justify-center text-lg shrink-0">${icon}</div>
+        <div class="w-10 h-10 rounded-xl ${isIn?'bg-success/10 text-success':'bg-danger/10 text-danger'} flex items-center justify-center shrink-0">${icon}</div>
         <div class="flex-1 min-w-0"><p class="text-sm font-semibold text-ink">${k.kategori}</p><p class="text-xs text-ink-muted truncate">${k.catatan||'-'}</p></div>
         <p class="text-sm font-bold ${isIn?'text-success':'text-danger'} shrink-0">${isIn?'+':'-'} ${fmtRp(k.jumlah)}</p>
         <div class="flex gap-1 shrink-0"><button onclick="openEditK('${k.id}')" class="w-7 h-7 rounded-lg bg-surface-muted flex items-center justify-center text-ink-muted active:scale-90 cursor-pointer"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
@@ -441,8 +474,8 @@ function toggleKCharts(){const c=$('k-charts'),ch=$('k-chev');const h=c.classLis
 // ============ RIWAYAT ============
 function buildRItems() {
   const items=[];
-  S.txTabungan.forEach(tx=>items.push({type:'tabungan',tipe:tx.tipe,jml:Number(tx.jumlah),note:tx.catatan||'-',label:tx.tabungan_nama||'Tabungan',tgl:tx.tanggal,icon:tx.tipe==='setor'?'🐷':'💸',badge:tx.tipe==='setor'?'Setor':'Tarik',badgeCls:tx.tipe==='setor'?'bg-success/10 text-success':'bg-danger/10 text-danger'}));
-  S.keuangan.forEach(k=>items.push({type:'keuangan',tipe:k.tipe,jml:Number(k.jumlah),note:k.catatan||'-',label:k.kategori,tgl:k.tanggal,icon:KAT_ICON[k.kategori]||'📦',badge:k.tipe==='pemasukan'?'Pemasukan':'Pengeluaran',badgeCls:k.tipe==='pemasukan'?'bg-success/10 text-success':'bg-danger/10 text-danger'}));
+  S.txTabungan.forEach(tx=>items.push({type:'tabungan',tipe:tx.tipe,jml:Number(tx.jumlah),note:tx.catatan||'-',label:tx.tabungan_nama||'Tabungan',tgl:tx.tanggal,icon:tx.tipe==='setor'?SVG_ICONS.Tabungan:SVG_ICONS.Tarik,badge:tx.tipe==='setor'?'Setor':'Tarik',badgeCls:tx.tipe==='setor'?'bg-success/10 text-success':'bg-danger/10 text-danger'}));
+  S.keuangan.forEach(k=>items.push({type:'keuangan',tipe:k.tipe,jml:Number(k.jumlah),note:k.catatan||'-',label:k.kategori,tgl:k.tanggal,icon:KAT_ICON[k.kategori]||SVG_ICONS.Lainnya,badge:k.tipe==='pemasukan'?'Pemasukan':'Pengeluaran',badgeCls:k.tipe==='pemasukan'?'bg-success/10 text-success':'bg-danger/10 text-danger'}));
   items.sort((a,b)=>new Date(b.tgl)-new Date(a.tgl));
   return items;
 }
@@ -472,7 +505,7 @@ function renderRiwayat() {
 }
 function rItemsHtml(items){
   return items.map((it,i)=>`<div class="flex items-center gap-3 px-5 py-3 ${i<items.length-1?'border-b border-surface-dim':''}">
-    <div class="w-10 h-10 rounded-xl bg-surface-muted flex items-center justify-center text-lg shrink-0">${it.icon}</div>
+    <div class="w-10 h-10 rounded-xl bg-surface-muted text-ink-muted flex items-center justify-center shrink-0">${it.icon}</div>
     <div class="flex-1 min-w-0"><div class="flex items-center gap-2 mb-0.5"><p class="text-sm font-semibold text-ink truncate">${it.label}</p><span class="text-[10px] font-semibold px-2 py-0.5 rounded-full ${it.badgeCls} whitespace-nowrap">${it.badge}</span></div><p class="text-xs text-ink-muted truncate">${it.note} · ${fmtDate(it.tgl)}</p></div>
     <p class="text-sm font-bold ${it.tipe==='pemasukan'||it.tipe==='setor'?'text-success':'text-danger'} whitespace-nowrap shrink-0">${it.tipe==='pemasukan'||it.tipe==='setor'?'+':'-'} ${fmtRp(it.jml)}</p></div>`).join('');
 }
@@ -557,7 +590,7 @@ async function submitTx(e){
 // -- Add/Edit Keuangan --
 function openAddK(){
   S.kTipe='pemasukan';
-  const catOpts = cats => cats.map(c=>`<option value="${c}">${KAT_ICON[c]||'📦'} ${c}</option>`).join('');
+  const catOpts = cats => cats.map(c=>`<option value="${c}">${c}</option>`).join('');
   const body=`<form id="frm-k" onsubmit="submitK(event)"><input type="hidden" id="k-eid" value="">
     <div class="mb-4"><label class="block text-sm font-semibold text-ink mb-2">Tipe Transaksi</label><div class="flex rounded-xl bg-surface-muted p-1 gap-1"><button type="button" id="k-btn-in" onclick="setKTipe('pemasukan')" class="flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all bg-success text-white cursor-pointer">Pemasukan</button><button type="button" id="k-btn-out" onclick="setKTipe('pengeluaran')" class="flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all text-ink-muted cursor-pointer">Pengeluaran</button></div></div>
     <div class="mb-4"><label class="block text-sm font-semibold text-ink mb-1.5">Jumlah (Rp)</label><input id="k-jml" type="number" min="1" placeholder="1000000" required class="w-full px-4 py-3 rounded-xl border-2 border-surface-dim bg-surface-muted text-sm text-ink placeholder:text-ink-light focus:border-primary focus:outline-none transition-colors"></div>
@@ -582,7 +615,7 @@ function setKTipe(t){
   if(!bi||!bo) return;
   if(t==='pemasukan'){bi.className='flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all bg-success text-white cursor-pointer';bo.className='flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all text-ink-muted cursor-pointer';}
   else{bi.className='flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all text-ink-muted cursor-pointer';bo.className='flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all bg-danger text-white cursor-pointer';}
-  if(sel){const cats=t==='pemasukan'?KAT_IN:KAT_OUT;sel.innerHTML=cats.map(c=>`<option value="${c}">${KAT_ICON[c]||'📦'} ${c}</option>`).join('');}
+  if(sel){const cats=t==='pemasukan'?KAT_IN:KAT_OUT;sel.innerHTML=cats.map(c=>`<option value="${c}">${c}</option>`).join('');}
 }
 async function submitK(e){
   e.preventDefault();
